@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 
-const Search = ({ search }: any) => {
+const Search = memo(({ search }: any) => {
   const [searchValue, setSearchValue] = useState("");
 
   const onSearch = (event: any) => {
@@ -11,7 +11,7 @@ const Search = ({ search }: any) => {
 
   return (
     <>
-      <div className="flex justify-center mt-10 mb-10 w-full group">
+      <div className="flex justify-center mt-12 mb-12 w-full group">
         {/* <div className="flex w-1/2"> */}
         {/* <form className="w-1/2"> */}
         <div className="w-1/2">
@@ -31,9 +31,9 @@ const Search = ({ search }: any) => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 ></path>
               </svg>
@@ -72,9 +72,9 @@ const Search = ({ search }: any) => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               ></path>
             </svg>
@@ -84,6 +84,6 @@ const Search = ({ search }: any) => {
       </div>
     </>
   );
-};
+});
 
 export default Search;

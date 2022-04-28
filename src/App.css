@@ -37,8 +37,15 @@
   }
 } */
 
+/* body {
+  display: flex;
+  flex-direction: column;
+} */
+
 footer {
-  position: absolute; /* ←絶対位置 */
+  margin-top: auto;
+
+  position: absolute;
   bottom: 0;
   width: 100%;
 }
