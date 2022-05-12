@@ -62,7 +62,6 @@ const Home = () => {
   if (user !== null) {
     const displayName = user.displayName;
     // The user object has basic properties such as display name, email, etc.
-    console.log(displayName);
   }
 
   useEffect(() => {
