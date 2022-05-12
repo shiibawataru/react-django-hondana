@@ -7,6 +7,7 @@ import Footer from "./component/Footer";
 // import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 import Login from "./Login";
+import { AuthProvider } from "./AuthProvider";
 
 // styled-components
 //--------------------------
@@ -23,13 +24,15 @@ function App() {
   return (
     <All>
       <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/addbook" element={<AddBook />} />
-        </Routes>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/addbook" element={<AddBook />} />
+          </Routes>
+          <Footer />
+        </AuthProvider>
       </BrowserRouter>
     </All>
   );

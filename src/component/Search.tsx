@@ -1,12 +1,21 @@
-import React, { memo, useState } from "react";
+import React, { memo, useContext, useState } from "react";
+import { AuthContext } from "../AuthProvider";
 
 const Search = memo((props: any) => {
+  const { currentUser } = useContext(AuthContext);
   const [searchValue, setSearchValue] = useState("");
+  const [loginAlert, setLoginAlert] = useState(false);
 
   const onSearch = (event: any) => {
-    props.setDatas([]);
-    setSearchValue(event.target.value);
-    props.search(searchValue);
+    if (currentUser) {
+      // setLoginAlert(false);
+      props.setDatas([]);
+      setSearchValue(event.target.value);
+      props.search(searchValue);
+    } else {
+      setLoginAlert(true);
+      return;
+    }
   };
 
   // Enterキーで検索
@@ -67,6 +76,16 @@ const Search = memo((props: any) => {
             role="alert"
           >
             <span className="font-medium">見つかりませんでした</span>
+          </div>
+        </div>
+      )}
+      {loginAlert && (
+        <div className="flex justify-center">
+          <div
+            className="w-full sm:w-1/2 mx-5 flex justify-center p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
+            role="alert"
+          >
+            <span className="font-medium">ログインしてください</span>
           </div>
         </div>
       )}

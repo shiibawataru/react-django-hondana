@@ -7,26 +7,9 @@ export const Modal = memo((props: any) => {
   const [dateValue, setDateValue] = useState("");
   const [comment, setComment] = useState("");
 
-  // const onAdd = () => {
-  //   axios.post("http://localhost:8000/app/books/", {
-  //     imageUrl: props.data.imageUrl,
-  //     title: props.data.title,
-  //     author: props.data.author,
-  //     seriesName: props.data.seriesName,
-  //     comment: comment,
-  //     readDay: dateValue,
-  //   });
-  //   props.setShowModal(false);
-  //   setComment("");
-  //   setDateValue("");
-  //   alert("本棚に入れておきました");
-  // };
   const onAdd = () => {
     const usersCollectionRef = collection(db, "books");
-    // const documentRef = await addDoc(usersCollectionRef, {
-    //   name: name.value,
-    //   email: email.value,
-    // });
+
     addDoc(usersCollectionRef, {
       imageUrl: props.data.imageUrl,
       title: props.data.title,

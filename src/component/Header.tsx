@@ -1,20 +1,24 @@
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import styled from "styled-components";
+import { AuthContext } from "../AuthProvider";
 
 // import styled from "styled-components";
 
 // styled-components
 //--------------------------
-// const Head = styled.header`
-//   height: 100px;
-// `;
+const LoginUser = styled.header`
+  text-align: right;
+  margin-top: 10px;
+`;
 
 //--------------------------
 
 const Header = () => {
   const [buttonName, setButtonName] = useState("");
+  const [loginName, setLoginName] = useState<string | null>("");
 
   const navigate = useNavigate();
   const auth = getAuth();
@@ -23,8 +27,10 @@ const Header = () => {
   useEffect(() => {
     if (user) {
       setButtonName("ログアウト");
+      setLoginName(user.displayName);
     } else {
       setButtonName("ログイン");
+      setLoginName("");
     }
   });
 
@@ -109,6 +115,9 @@ const Header = () => {
             </ul>
           </div>
         </div>
+        <LoginUser>
+          {user ? <div>ユーザー:{loginName}</div> : <div>ユーザー:ゲスト</div>}
+        </LoginUser>
       </nav>
     </div>
   );
