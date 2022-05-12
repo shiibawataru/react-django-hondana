@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getAuth } from "firebase/auth";
 
 import { db } from "./firebase";
 import {
@@ -53,6 +54,16 @@ const Home = () => {
   const [editTitle, setEditTitle] = useState("");
   const [editSeriesName, setEditSeriesName] = useState("");
   const [editAuthor, setEditAuthor] = useState("");
+  const [userName, setUserName] = useState("");
+
+  // ログインユーザーのプロフィール名を取得
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (user !== null) {
+    const displayName = user.displayName;
+    // The user object has basic properties such as display name, email, etc.
+    console.log(displayName);
+  }
 
   useEffect(() => {
     const booksCollectionRef = collection(db, "books");

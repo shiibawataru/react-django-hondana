@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 // import styled from "styled-components";
 
@@ -13,19 +14,34 @@ import { useNavigate } from "react-router-dom";
 //--------------------------
 
 const Header = () => {
+  const [buttonName, setButtonName] = useState("");
+
   const navigate = useNavigate();
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    if (user) {
+      setButtonName("ログアウト");
+    } else {
+      setButtonName("ログイン");
+    }
+  });
 
   const onLogout = () => {
-    console.log("logout");
     const auth = getAuth();
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        navigate("/");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+    if (user) {
+      signOut(auth)
+        .then(() => {
+          // Sign-out successful.
+          navigate("/");
+        })
+        .catch((error) => {
+          // An error happened.
+        });
+    } else {
+      navigate("/");
+    }
   };
 
   return (
@@ -83,11 +99,11 @@ const Header = () => {
               </Link>
               <div>
                 <button
-                  onClick={onLogout}
+                  onClick={() => onLogout()}
                   type="button"
                   className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
-                  ログアウト
+                  {buttonName}
                 </button>
               </div>
             </ul>
