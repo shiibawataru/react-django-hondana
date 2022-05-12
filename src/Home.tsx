@@ -54,15 +54,6 @@ const Home = () => {
   const [editTitle, setEditTitle] = useState("");
   const [editSeriesName, setEditSeriesName] = useState("");
   const [editAuthor, setEditAuthor] = useState("");
-  const [userName, setUserName] = useState("");
-
-  // ログインユーザーのプロフィール名を取得
-  const auth = getAuth();
-  const user = auth.currentUser;
-  if (user !== null) {
-    const displayName = user.displayName;
-    // The user object has basic properties such as display name, email, etc.
-  }
 
   useEffect(() => {
     const booksCollectionRef = collection(db, "books");
@@ -112,6 +103,14 @@ const Home = () => {
   // モーダル閉じる
   const closeModal = () => {
     setShowModal(false);
+    setInfo({
+      imageUrl: "",
+      title: "",
+      author: "",
+      seriesName: "",
+      comment: "",
+      readDay: "",
+    });
   };
 
   //　更新
