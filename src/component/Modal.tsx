@@ -1,43 +1,40 @@
-import axios from "axios";
 import React, { memo, useState } from "react";
 
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase";
+
 export const Modal = memo((props: any) => {
-  //   const [showModal, setShowModal] = React.useState(false);
-  //   const [info, setInfo] = useState({
-  //     imageUrl: "",
-  //     title: "",
-  //     author: "",
-  //     seriesName: "",
-  //   });
   const [dateValue, setDateValue] = useState("");
   const [comment, setComment] = useState("");
 
-  //   const onSelect = () => {
-  //     setInfo({
-  //       ...info,
-  //       imageUrl: props.data.data.Item.largeImageUrl,
-  //       title: props.data.data.Item.title,
-  //       author: props.data.data.Item.author,
-  //       seriesName: props.data.data.Item.seriesName,
-  //     });
-  //   };
-
-  // const alert = () => {
-  //   props.setAlert(true);
+  // const onAdd = () => {
+  //   axios.post("http://localhost:8000/app/books/", {
+  //     imageUrl: props.data.imageUrl,
+  //     title: props.data.title,
+  //     author: props.data.author,
+  //     seriesName: props.data.seriesName,
+  //     comment: comment,
+  //     readDay: dateValue,
+  //   });
+  //   props.setShowModal(false);
+  //   setComment("");
+  //   setDateValue("");
+  //   alert("本棚に入れておきました");
   // };
-
-  // const stopAlert = () => {
-  //   props.setAlert(false);
-  // };
-
   const onAdd = () => {
-    axios.post("http://localhost:8000/app/books/", {
+    const usersCollectionRef = collection(db, "books");
+    // const documentRef = await addDoc(usersCollectionRef, {
+    //   name: name.value,
+    //   email: email.value,
+    // });
+    addDoc(usersCollectionRef, {
       imageUrl: props.data.imageUrl,
       title: props.data.title,
       author: props.data.author,
       seriesName: props.data.seriesName,
       comment: comment,
       readDay: dateValue,
+      timestamp: serverTimestamp(),
     });
     props.setShowModal(false);
     setComment("");
@@ -69,7 +66,7 @@ export const Modal = memo((props: any) => {
                     <div>
                       <label
                         htmlFor="title"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         タイトル
                       </label>
@@ -86,7 +83,7 @@ export const Modal = memo((props: any) => {
                     <div>
                       <label
                         htmlFor="author"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         著者
                       </label>
@@ -103,7 +100,7 @@ export const Modal = memo((props: any) => {
                     <div>
                       <label
                         htmlFor="seriesName"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         出版社
                       </label>
@@ -120,7 +117,7 @@ export const Modal = memo((props: any) => {
                     <div>
                       <label
                         htmlFor="comment"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         コメント
                       </label>
@@ -138,7 +135,7 @@ export const Modal = memo((props: any) => {
                     <div>
                       <label
                         htmlFor="comment"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         読み終えた日
                       </label>

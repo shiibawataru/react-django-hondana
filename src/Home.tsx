@@ -1,8 +1,16 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import BookDetail from "./component/BookDetail";
-// import { Modal } from "./component/Modal";
+
+import { db } from "./firebase";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+} from "firebase/firestore";
 
 // styled-components
 //--------------------------
@@ -11,16 +19,24 @@ const Book = styled.div`
   writing-mode: vertical-rl;
   height: 700px;
 `;
-
-// const BookShelf = styled.div`
-//   border: solid;
-// `;
+const Bunnko = styled.div`
+  margin: 0 auto;
+`;
 
 //--------------------------
 
+type ReadBook = {
+  id: string;
+  imageUrl: string;
+  title: string;
+  author: string;
+  seriesName: string;
+  comment: string;
+  readDay: string;
+};
+
 const Home = () => {
-  const [books, setBooks] = useState([]);
-  // const [bookDetail, setBookDetail] = useState(false);
+  const [books, setBooks] = useState<ReadBook[]>([]);
   const [showModal, setShowModal] = React.useState(false);
   const [info, setInfo] = useState({
     imageUrl: "",
@@ -30,6 +46,7 @@ const Home = () => {
     comment: "",
     readDay: "",
   });
+  const [selectId, setSelectId] = useState("");
 
   const [editComment, setEditComment] = useState("");
   const [editDate, setEditDate] = useState("");
@@ -37,28 +54,40 @@ const Home = () => {
   const [editSeriesName, setEditSeriesName] = useState("");
   const [editAuthor, setEditAuthor] = useState("");
 
-  const [selectId, setSelectId] = useState();
-  // const [showModal,setShowModal] = useState(false)
-
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/app/books/")
-      // .then((res: any) => console.log(res.data))
-      .then((res: any) => setBooks(res.data))
-      .catch((err) => console.log(err));
+    const booksCollectionRef = collection(db, "books");
+    // 追加順に並べ替え
+    const q = query(booksCollectionRef, orderBy("timestamp"));
+    getDocs(q).then((querySnapshot) => {
+      const bookList: any = [];
+      querySnapshot.docs.map((doc) => {
+        const book = {
+          id: doc.id,
+          imageUrl: doc.data().imageUrl,
+          title: doc.data().title,
+          author: doc.data().author,
+          seriesName: doc.data().seriesName,
+          comment: doc.data().comment,
+          readDay: doc.data().readDay,
+        };
+        bookList.push(book);
+        return book;
+      });
+      setBooks(bookList);
+    });
   }, []);
 
   // 削除
-  const onDelete = () => {
-    axios.delete(`http://localhost:8000/app/books/${selectId}`);
+  const onDelete = async () => {
+    await deleteDoc(doc(db, "books", selectId));
     setShowModal(false);
     alert(`${info.author}の「${info.title}」を削除しました`);
     //　リアルタイム削除用
-    setBooks(books.filter((book: any) => book.id !== selectId));
+    setBooks(books.filter((book: ReadBook) => book.id !== selectId));
   };
 
   // 選択、モーダルオープン
-  const onOpen = (Item: any) => {
+  const onOpen = (Item: ReadBook) => {
     setSelectId(Item.id);
     setShowModal(true);
     setInfo({
@@ -76,8 +105,9 @@ const Home = () => {
   };
 
   //　更新
-  const onUpdate = () => {
-    axios.put(`http://localhost:8000/app/books/${selectId}/`, {
+  const onUpdate = async () => {
+    const userDocumentRef = doc(db, "books", selectId);
+    await updateDoc(userDocumentRef, {
       imageUrl: info.imageUrl,
       title: editTitle || info.title,
       author: editAuthor || info.author,
@@ -86,35 +116,43 @@ const Home = () => {
       readDay: editDate || info.readDay,
     });
     setShowModal(false);
-    // alert(`${info.author}の「${info.title}」を更新しました`);
+    alert(`${info.author}の「${info.title}」を更新しました`);
   };
 
   return (
     <>
       <div className="flex flex-wrap m-10">
-        {books.map((book: any, index) => {
-          return (
-            <>
-              <Book>
-                <div
-                  key={index}
-                  onClick={() => onOpen(book)}
-                  className="flex h-full w-16 p-2 max-w-sm bg-white hover:bg-indigo-100 rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
-                >
-                  <p className="h-3/5 mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    {book.title}
-                  </p>
-                  <p className="h-1/5 mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    {book.author}
-                  </p>
-                  <p className="h-1/5 mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    {book.seriesName}
-                  </p>
-                </div>
-              </Book>
-            </>
-          );
-        })}
+        {React.Children.toArray(
+          books.map((book: ReadBook) => {
+            return (
+              <>
+                <Book>
+                  <div
+                    key={book.id}
+                    onClick={() => onOpen(book)}
+                    className="flex h-full w-16 p-2 max-w-sm bg-white hover:bg-indigo-100 rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+                  >
+                    <Bunnko className="h-3/5 content-center">
+                      <p className="mb-3 mt-3 font-normal text-gray-700 dark:text-gray-400">
+                        {book.title}
+                      </p>
+                    </Bunnko>
+                    <Bunnko className="h-1/5">
+                      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                        {book.author}
+                      </p>
+                    </Bunnko>
+                    <Bunnko className="h-1/5">
+                      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                        {book.seriesName}
+                      </p>
+                    </Bunnko>
+                  </div>
+                </Book>
+              </>
+            );
+          })
+        )}
       </div>
       {showModal ? (
         <>
@@ -125,25 +163,23 @@ const Home = () => {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                   <h3 className="text-3xl font-semibold">Book Information</h3>
-                  {/* <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b"> */}
                   <button
                     className="justify-end text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button"
-                    onClick={onDelete}
+                    onClick={() => onDelete()}
                   >
                     削除
                   </button>
-                  {/* </div> */}
                 </div>
                 <form className="flex p-5" action="#">
-                  <div className="p-2">
+                  <div className="p-2 ">
                     <img src={info.imageUrl} alt="表紙写真" />
                   </div>
                   <div className="p-2 w-full">
                     <div>
                       <label
                         htmlFor="title"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         タイトル
                       </label>
@@ -159,7 +195,7 @@ const Home = () => {
                     <div>
                       <label
                         htmlFor="author"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         著者
                       </label>
@@ -175,7 +211,7 @@ const Home = () => {
                     <div>
                       <label
                         htmlFor="seriesName"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         出版社
                       </label>
@@ -193,7 +229,7 @@ const Home = () => {
                     <div>
                       <label
                         htmlFor="comment"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         コメント
                       </label>
@@ -208,7 +244,7 @@ const Home = () => {
                     <div>
                       <label
                         htmlFor="comment"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        className="block mt-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                       >
                         読み終えた日
                       </label>

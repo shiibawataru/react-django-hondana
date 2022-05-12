@@ -6,13 +6,14 @@ import Header from "./component/Header";
 import Footer from "./component/Footer";
 // import { Redirect } from "react-router-dom";
 import styled from "styled-components";
+import Login from "./Login";
 
 // styled-components
 //--------------------------
 const All = styled.div`
   min-height: 100vh; /* ←コンテンツの高さの最小値＝ブラウザの高さに指定 */
   position: relative; /* ←相対位置 */
-  padding-bottom: 60px; /* ←フッターの高さを指定 */
+  padding-bottom: 100px; /* ←フッターの高さを指定 */
   box-sizing: border-box;
 `;
 
@@ -24,7 +25,8 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/addbook" element={<AddBook />} />
         </Routes>
         <Footer />
