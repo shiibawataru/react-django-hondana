@@ -2,8 +2,11 @@ import React, { memo, useState } from "react";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 export const Modal = memo((props: any) => {
+  const navigate = useNavigate();
+
   const [dateValue, setDateValue] = useState("");
   const [comment, setComment] = useState("");
 
@@ -23,6 +26,7 @@ export const Modal = memo((props: any) => {
     setComment("");
     setDateValue("");
     alert("本棚に入れておきました");
+    navigate("/home");
   };
 
   const closeModal = () => {
