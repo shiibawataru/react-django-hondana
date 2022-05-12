@@ -27,6 +27,7 @@ export const Modal = memo((props: any) => {
 
   const closeModal = () => {
     props.setShowModal(false);
+    setDateValue("");
   };
 
   return (
