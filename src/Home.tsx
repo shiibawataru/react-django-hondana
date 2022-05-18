@@ -11,6 +11,7 @@ import {
   orderBy,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 
 // styled-components
@@ -55,10 +56,18 @@ const Home = () => {
   const [editSeriesName, setEditSeriesName] = useState("");
   const [editAuthor, setEditAuthor] = useState("");
 
+  // User情報の取得
+  const auth = getAuth();
+  const user = auth.currentUser;
+
   useEffect(() => {
     const booksCollectionRef = collection(db, "books");
-    // 追加順に並べ替え
-    const q = query(booksCollectionRef, orderBy("timestamp"));
+    // ユーザーIDで絞り込みと追加順に並べ替え
+    const q = query(
+      booksCollectionRef,
+      where("uid", "==", user?.uid),
+      orderBy("timestamp")
+    );
     getDocs(q).then((querySnapshot) => {
       const bookList: any = [];
       querySnapshot.docs.map((doc) => {

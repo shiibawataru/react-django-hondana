@@ -40,7 +40,6 @@ const Login = () => {
         setLoginErrorMEssage(false);
         // ログイン成功時ページ遷移
         navigate("/home");
-        console.log(user.email);
       })
       .catch((error) => {
         const errorCode = error.code;
