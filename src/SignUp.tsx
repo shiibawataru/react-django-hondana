@@ -19,8 +19,8 @@ const SignUp = () => {
         // Signed in
         const user = userCredential.user;
         // ログイン成功時ページ遷移
+        setShowErrorMessage(false);
         navigate("/home");
-        console.log("登録完了");
       })
       .catch((error) => {
         const errorCode = error.code;
