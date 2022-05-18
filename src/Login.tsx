@@ -40,6 +40,7 @@ const Login = () => {
         setLoginErrorMEssage(false);
         // ログイン成功時ページ遷移
         navigate("/home");
+        console.log(user.email);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -77,7 +78,6 @@ const Login = () => {
 
   return (
     <>
-      {/* <FormStyle> */}
       <div className="flex justify-center">
         <div className="mt-12 p-4 w-1/3 bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
           <form className="space-y-6" action="#">
@@ -166,7 +166,6 @@ const Login = () => {
           </form>
         </div>
       </div>
-      {/* </FormStyle> */}
     </>
   );
 };

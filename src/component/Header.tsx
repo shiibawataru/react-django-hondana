@@ -27,7 +27,11 @@ const Header = () => {
   useEffect(() => {
     if (user) {
       setButtonName("Logout");
-      setLoginName(user.displayName);
+      if (user.displayName) {
+        setLoginName(user.displayName);
+      } else {
+        setLoginName(user.email);
+      }
     } else {
       setButtonName("Login");
       setLoginName("");
