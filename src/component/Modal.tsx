@@ -3,12 +3,15 @@ import React, { memo, useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 export const Modal = memo((props: any) => {
-  const navigate = useNavigate();
-
   const [dateValue, setDateValue] = useState("");
   const [comment, setComment] = useState("");
+
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const onAdd = () => {
     const usersCollectionRef = collection(db, "books");
@@ -21,6 +24,7 @@ export const Modal = memo((props: any) => {
       comment: comment,
       readDay: dateValue,
       timestamp: serverTimestamp(),
+      uid: user?.uid,
     });
     props.setShowModal(false);
     setComment("");
