@@ -32,7 +32,7 @@ const SignUp = () => {
   return (
     <>
       <div className="flex justify-center">
-        <div className="mt-12 p-4 w-1/3 bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <div className="mt-12 p-4 w-5/6 max-w-md bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
           <form className="space-y-6" action="#">
             <h5 className="flex justify-center text-3xl font-medium text-gray-900 dark:text-white">
               Sign up
