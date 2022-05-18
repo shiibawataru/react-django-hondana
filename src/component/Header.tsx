@@ -26,10 +26,10 @@ const Header = () => {
 
   useEffect(() => {
     if (user) {
-      setButtonName("ログアウト");
+      setButtonName("Logout");
       setLoginName(user.displayName);
     } else {
-      setButtonName("ログイン");
+      setButtonName("Login");
       setLoginName("");
     }
   });
@@ -116,7 +116,7 @@ const Header = () => {
           </div>
         </div>
         <LoginUser>
-          {user ? <div>ユーザー:{loginName}</div> : <div>ユーザー:ゲスト</div>}
+          {user ? <div>User:{loginName}</div> : <div>User:ゲスト</div>}
         </LoginUser>
       </nav>
     </div>
