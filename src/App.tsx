@@ -8,6 +8,7 @@ import Footer from "./component/Footer";
 import styled from "styled-components";
 import Login from "./Login";
 import { AuthProvider } from "./AuthProvider";
+import SignUp from "./SignUp";
 
 // styled-components
 //--------------------------
@@ -28,6 +29,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/home" element={<Home />} />
             <Route path="/addbook" element={<AddBook />} />
           </Routes>

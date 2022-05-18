@@ -24,6 +24,7 @@ import {
 const Login = () => {
   const [mailAddress, setMailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [loginErrorMessage, setLoginErrorMEssage] = useState(false);
 
   // ページ遷移
   const navigate = useNavigate();
@@ -35,12 +36,16 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        // エラーメッセージ
+        setLoginErrorMEssage(false);
         // ログイン成功時ページ遷移
         navigate("/home");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        // エラーメッセージ表示
+        setLoginErrorMEssage(true);
       });
   };
 
@@ -67,7 +72,6 @@ const Login = () => {
         const email = error.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
       });
   };
 
@@ -77,7 +81,7 @@ const Login = () => {
       <div className="flex justify-center">
         <div className="mt-12 p-4 w-1/3 bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
           <form className="space-y-6" action="#">
-            <h5 className="text-xl font-medium text-gray-900 dark:text-white">
+            <h5 className="flex justify-center text-3xl font-medium text-gray-900 dark:text-white">
               Sign in
             </h5>
             <div>
@@ -113,6 +117,13 @@ const Login = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 required
               />
+              {loginErrorMessage && (
+                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                  <span className="font-bold text-sm">
+                    メールアドレスまたはパスワードが間違っています
+                  </span>
+                </p>
+              )}
             </div>
             <button
               onClick={onMailLogin}
@@ -124,7 +135,7 @@ const Login = () => {
             <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
               Not registered?{" "}
               <a
-                href="#"
+                href="/signup"
                 className="text-blue-700 hover:underline dark:text-blue-500"
               >
                 Create account
