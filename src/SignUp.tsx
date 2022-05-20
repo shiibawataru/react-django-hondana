@@ -20,7 +20,7 @@ const SignUp = () => {
         const user = userCredential.user;
         // ログイン成功時ページ遷移
         setShowErrorMessage(false);
-        navigate("/home");
+        navigate("/");
       })
       .catch((error) => {
         const errorCode = error.code;
